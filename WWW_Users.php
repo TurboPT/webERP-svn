@@ -1,5 +1,11 @@
 <?php
-/* Entry of users and security settings of users */
+// WWW_Users.php
+// Entry of users and security settings of users.
+
+include('includes/session.php');
+$Title = _('Users Maintenance');
+$ViewTopic = 'GettingStarted';
+$BookMark = 'UserMaintenance';
 
 if(isset($_POST['UserID']) AND isset($_POST['ID'])) {
 	if($_POST['UserID'] == $_POST['ID']) {
@@ -7,10 +13,6 @@ if(isset($_POST['UserID']) AND isset($_POST['ID'])) {
 	}
 }
 
-include('includes/session.php');
-$Title = _('Users Maintenance');
-$ViewTopic = 'GettingStarted';
-$BookMark = 'UserMaintenance';
 include('includes/header.php');
 
 echo '<p class="page_title_text"><img alt="" src="', $RootPath, '/css/', $Theme,
@@ -19,6 +21,10 @@ echo '<p class="page_title_text"><img alt="" src="', $RootPath, '/css/', $Theme,
 	$Title, '</p>';// Page title.
 echo '<br />';// Extra line after page_title_text.
 
+if($AllowDemoMode) {
+	prnMsg(_('The the system is in demo mode and the security model administration is disabled'), 'warn');
+	exit;
+} 
 $ModuleList = array(
 	_('Sales'),
 	_('Receivables'),
@@ -731,8 +737,7 @@ if($_POST['ShowDashboard']==0) {
 	echo '<option value="0">', _('No'), '</option>',
  		 '<option selected="selected" value="1">', _('Yes'), '</option>';
 }
-echo '</select>',
-		(!isset($_SESSION['ShowFieldHelp']) || $_SESSION['ShowFieldHelp'] ? _('Show dashboard page after login') : ''), // If the parameter $_SESSION['ShowFieldHelp'] is not set OR is TRUE, shows this field help text.
+echo '</select>', fShowFieldHelp(_('Show dashboard page after login')), // Function fShowFieldHelp() in ~/includes/MiscFunctions.php
 		'</td>
 	</tr>';
 // Turn off/on page help:
@@ -746,8 +751,7 @@ if($_POST['ShowPageHelp']==0) {
 	echo '<option value="0">', _('No'), '</option>',
  		 '<option selected="selected" value="1">', _('Yes'), '</option>';
 }
-echo '</select>',
-		(!isset($_SESSION['ShowFieldHelp']) || $_SESSION['ShowFieldHelp'] ? _('Show page help when available') : ''), // If the parameter $_SESSION['ShowFieldHelp'] is not set OR is TRUE, shows this field help text.
+echo '</select>', fShowFieldHelp(_('Show page help when available')), // Function fShowFieldHelp() in ~/includes/MiscFunctions.php
 		'</td>
 	</tr>';
 // Turn off/on field help:
@@ -761,8 +765,7 @@ if($_POST['ShowFieldHelp']==0) {
 	echo '<option value="0">', _('No'), '</option>',
  		 '<option selected="selected" value="1">', _('Yes'), '</option>';
 }
-echo '</select>',
-		(!isset($_SESSION['ShowFieldHelp']) || $_SESSION['ShowFieldHelp'] ? _('Show field help when available') : ''), // If the parameter $_SESSION['ShowFieldHelp'] is not set OR is TRUE, shows this field help text.
+echo '</select>', fShowFieldHelp(_('Show field help when available')), // Function fShowFieldHelp() in ~/includes/MiscFunctions.php
 		'</td>
 	</tr>';
 
